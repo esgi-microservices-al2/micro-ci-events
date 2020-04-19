@@ -1,0 +1,3 @@
+[submodule "event-queue/rabbitmq"]
+	path = event-queue/rabbitmq
+	url = https://github.com/dockerfile/rabbitmq.git
