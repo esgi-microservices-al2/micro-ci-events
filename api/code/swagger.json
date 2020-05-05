@@ -1,0 +1,215 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Swagger for events API for ESGI AL2 Microservice project",
+    "version": "1.0.0",
+    "title": "Swagger Events API"
+  },
+  "host": "localhost",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "event",
+      "description": "easily retrieve events"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/event": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Get all events of the db",
+        "description": "",
+        "operationId": "getEvents",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          }
+        }
+      }
+    },
+    "/event/{eventId}": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Find event by ID",
+        "description": "Returns a single event",
+        "operationId": "getEventById",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "ID of event to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Event not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Updates a event in the store with form data",
+        "description": "",
+        "operationId": "updateEventWithForm",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "ID of event that needs to be updated",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "description": "Updated name of the event",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "formData",
+            "description": "Updated status of the event",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Deletes an event",
+        "description": "",
+        "operationId": "deleteEvent",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "Pet id to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Event not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Event": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "type": {
+          "type": "string",
+          "description": "Event Type",
+          "enum": [
+            "Used",
+            "approved",
+            "delivered"
+          ]
+        },
+        "content": {
+          "type": "string",
+          "format": "varchar"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "complete": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "xml": {
+        "name": "Event"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
