@@ -1,18 +1,22 @@
----
-version: '3.8'
+version: '3.7'
 services:
  app:
-  build: .
-  image: mon-mongo
-  ports:
-   - "27017:27017"
-  
- mongo:
-  image: "mongo"
+  container_name: 'my-mongo-container-2'
   restart: always
+  build: .
+  ports:
+   - "3000:3000"
+  links:
+   - database
+ database:
+  image: 'mongo'
+  container_name: 'my-mongo-container'
   environment:
-   MONGO_INITDB_ROOT_USERNAME: root
-   MONGO_INITDB_ROOT_PASSWORD: root
-   MONGO_INITDB_ROOT_DATABASE: dbmongo
+   - MONGO_INITDB_DATABASE=dbmongo
+   - MONGO_INITDB_USERNAME=root
+   - MONGO_INITDB_PASSWORD=root
   volumes:
-   - ./data:/datab/db
+   - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+   - ./mongo-volume:/data/db
+  ports:
+   - '27017:27017'
