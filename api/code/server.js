@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 const port = process.env.PORT || 9000;
 
@@ -17,9 +19,11 @@ db.once('open', function (){
     console.log("Connexion à la base OK");
 });
 
-app.use('/event', require('./routes/event.router'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use('/events', require('./routes/event.routers'));
 
 app.listen(port);
-console.log(`Listening On http://localhost:${port}/event`);
+console.log(`Listening on http://localhost:${port}`);
 
 module.exports = app;
