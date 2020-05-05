@@ -1,0 +1,12 @@
+db.createUser(
+{
+user:"esgi",
+pwd:"esgi",
+roles:[
+{
+role:"readWrite",
+db:"dbms"
+}
+]
+}
+);
