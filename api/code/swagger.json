@@ -17,7 +17,7 @@
     "http"
   ],
   "paths": {
-    "/event": {
+    "/events": {
       "get": {
         "tags": [
           "event"

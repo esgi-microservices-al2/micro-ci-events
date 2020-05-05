@@ -21,9 +21,9 @@ db.once('open', function (){
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use('/event', require('./routes/event.router'));
+app.use('/events', require('./routes/event.routers'));
 
 app.listen(port);
-console.log(`Listening On http://localhost:${port}/event`);
+console.log(`Listening on http://localhost:${port}`);
 
 module.exports = app;
