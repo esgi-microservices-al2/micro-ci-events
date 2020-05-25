@@ -3,12 +3,13 @@ version: "3.7"
 services:
   rabbit1:
     image: "rabbitmq:3-management"
-    hostname: "rabbit1"
+    hostname: "rabbitmq1"
     environment:
       RABBITMQ_ERLANG_COOKIE: "secret_cookie"
       RABBITMQ_DEFAULT_USER: "rabbitmq"
       RABBITMQ_DEFAULT_PASS: "rabbitmq"
       RABBITMQ_DEFAULT_VHOST: "/"
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbitmq_management load_definitions "/tmp/rabbitmq/definitions.json"
     ports:
       - "15672:15672"
       - "5672:5672"
@@ -16,3 +17,4 @@ services:
       NAME: "rabbitmq1"
     volumes:
       - "./enabled_plugins:/etc/rabbitmq/enabled_plugins"
+      - "./definitions.json:/tmp/rabbitmq/definitions.json"
