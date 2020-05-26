@@ -9,7 +9,46 @@ jobs:
 
     steps:
     - name: Checkout Project
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
+
+    - name: print directory
+      run: ls
+
+    - name: Build database docker-compose
+      run: docker-compose -f ./database/docker-compose.yml up -d
+
+    - name: Build api docker-compose
+      run: docker-compose -f ./api/docker-compose.yml up -d
+
+    - name: print running containers
+      run: docker ps -a
+
+    - name: print database docker logs
+      run: docker logs mongo1
+
+    - name: print api docker logs
+      run: docker logs api_node_1
+
+    # upload build artifact to azure
+
+  #   if: github.ref == 'refs/heads/master'
+
+  #   - name: Upload Database Build Artifact to Azure Blob Storage
+  #     uses: fixpoint/azblob-upload-artifact@v3.3
+  #     with:
+  #       connection-string: ?
+  #       name: database
+  #       path: database/
+  #       container: microservice-events-artifacts
+
+  #   - name: Upload Api Build Artifact to Azure Blob Storage
+  #     uses: fixpoint/azblob-upload-artifact@v3.3
+  #     with:
+  #       connection-string: ?
+  #       name: api
+  #       path: api/
+  #       container: microservice-events-artifacts
+
 
     # Add your build steps here
 
@@ -41,3 +80,19 @@ jobs:
   #     with:
   #       inlineScript: |
   #         az vm run-command invoke -g ${{ secrets.AZURE_RESOURCE_GRP }} -n ${{ secrets.AZURE_VM }} --command-id RunShellScript --scripts "cd /home/{userName} && wget -q https://raw.githubusercontent.com/esgi-microservices-al2/micro-ci-events/master/.github/azure/docker-compose.yml -O docker-compose.yml && docker-compose stop && docker-compose rm && docker-compose up -d"
+
+  #   - name: Download Database Build Artifact to Azure Blob Storage
+  #     uses: fixpoint/azblob-download-artifact@v3.1
+  #     with:
+  #       connection-string: ?
+  #       name: database
+  #       path: database/release/
+  #       container: microservice-events-artifacts
+
+  #   - name: Download Database Build Artifact to Azure Blob Storage
+  #     uses: fixpoint/azblob-download-artifact@v3.1
+  #     with:
+  #       connection-string: ?
+  #       name: api
+  #       path: api/release/
+  #       container: microservice-events-artifacts
