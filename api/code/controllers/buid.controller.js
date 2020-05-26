@@ -28,3 +28,7 @@ exports.getBuildEvents = async (req, res) => {
         return result.event;
     })
 };
+
+exports.getBuildEvents = async (req, res) => {
+    return [];
+};
