@@ -11,17 +11,17 @@ jobs:
     - name: Checkout Project
       uses: actions/checkout@v2
 
-    - name: Test database docker-compose up
-      uses: hasnat/deploy-docker-compose@v0.1-alpha
-      with:
-        # Use dockerfile when you would like to explicitly build a Dockerfile
-        composefolder: database
+    - name: Build database docker-compose
+      run: docker-compose up --source ./database -d
 
-    - name: Test api docker-compose up
-      uses: hasnat/deploy-docker-compose@v0.1-alpha
-      with:
-        # Use dockerfile when you would like to explicitly build a Dockerfile
-        composefolder: api
+    - name: Build api docker-compose
+      run: docker-compose up --source ./api -d
+
+    - name: print running containers
+      run: docker ps -a
+
+    - name: print docker logs
+      run: docker logs
 
     # upload build artifact to azure
 
