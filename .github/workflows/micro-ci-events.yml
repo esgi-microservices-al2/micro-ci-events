@@ -11,6 +11,9 @@ jobs:
     - name: Checkout Project
       uses: actions/checkout@v2
 
+    - name: print directory
+      run: ls
+
     - name: Build database docker-compose
       run: docker-compose up --source ./database -d
 
