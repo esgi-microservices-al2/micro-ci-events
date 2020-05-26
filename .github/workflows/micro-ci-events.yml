@@ -15,10 +15,10 @@ jobs:
       run: ls
 
     - name: Build database docker-compose
-      run: docker-compose up --source ./database -d
+      run: docker-compose -f ./database/docker-compose.yml up -d
 
     - name: Build api docker-compose
-      run: docker-compose up --source ./api -d
+      run: docker-compose -f ./api/docker-compose.yml up -d
 
     - name: print running containers
       run: docker ps -a
