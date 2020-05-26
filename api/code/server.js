@@ -18,8 +18,9 @@ db.once('open', function (){
 });
 
 app.use('/event', require('./routes/event.router'));
+app.use('/build', require('./routes/build.router'));
 
 app.listen(port);
-console.log(`Listening On http://localhost:${port}/event`);
+console.log(`Listening On http://localhost:${port}`);
 
 module.exports = app;
