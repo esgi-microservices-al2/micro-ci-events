@@ -24,7 +24,7 @@ jobs:
       run: docker ps -a
 
     - name: print database docker logs
-      run: docker logs database_database_1
+      run: docker logs mongo1
 
     - name: print api docker logs
       run: docker logs api_node_1
