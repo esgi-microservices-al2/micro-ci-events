@@ -23,8 +23,11 @@ jobs:
     - name: print running containers
       run: docker ps -a
 
-    - name: print docker logs
-      run: docker logs
+    - name: print database docker logs
+      run: docker logs database_database_1
+
+    - name: print api docker logs
+      run: docker logs api_node_1
 
     # upload build artifact to azure
 
