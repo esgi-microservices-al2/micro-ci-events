@@ -2,7 +2,7 @@ version: '3'
 services:
  database:
   image: 'mongo'
-  container_name: my-mongo-container
+  container_name: mongo1
   restart: always
   env_file:
    - ./db_credentials.env
