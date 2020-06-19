@@ -1,21 +1,15 @@
 version: '3'
 
 services:
-  rabbitmq1:
-    image: bitnami/rabbitmq:latest
-    environment:
-      RABBITMQ_NODE_TYPE: queue-disc
-      RABBITMQ_NODE_NAME: rabbit@rabbitmq1
-      RABBITMQ_ERL_COOKIE: secret_cookie
-      RABBITMQ_DISK_FREE_LIMIT: "{mem_relative, 1.5}"
-      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbitmq_management load_definitions "/opt/bitnami/rabbitmq/etc/rabbitmq/definitions.json"
+  node:
+    image: esgimicroci/al2-events
+    container_name: al2-events
     ports:
-      - "15672:15672"
-      - "5672:5672"
-    volumes:
-      - 'rabbitmq1_data:/bitnami'
-      - './definitions.json:/opt/bitnami/rabbitmq/etc/rabbitmq/definitions.json'
-
-volumes:
-  rabbitmq1_data:
-    driver: local
+    - '8500:8500'
+    links:
+      - database
+      - rabbitmq
+    depends_on:
+      - database
+      - rabbitmq
+    restart: always
