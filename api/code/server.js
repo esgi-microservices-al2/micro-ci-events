@@ -1,14 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 8500;
 
 const app = express();
 app.use(bodyParser.json());
 
 const options = {useNewUrlParser: true, useUnifiedTopology: true};
-const urlmongo = "mongodb://127.0.0.1:27017/microservice";
+const urlmongo = "mongodb://esgi:esgi@database:27017/dbms";
 mongoose.connect(urlmongo, options);
 
 const db = mongoose.connection;
@@ -17,7 +19,7 @@ db.once('open', function (){
     console.log("Connexion à la base OK");
 });
 
-app.use('/event', require('./routes/event.router'));
+app.use('/event', require('./routes/events.router'));
 app.use('/build', require('./routes/build.router'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
