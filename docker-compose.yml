@@ -3,7 +3,7 @@ version: '3'
 services:
   database:
     image: 'mongo'
-    container_name: mongo1
+    container_name: mongo
     restart: always
     env_file:
       - ./database/db_credentials.env
@@ -13,18 +13,30 @@ services:
     ports:
       - '27017:27017'
 
-  node:
-    image: 'node:12'
-    user: 'node'
-    working_dir: /home/node/app
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    hostname: "rabbitmq"
     environment:
-      - NODE_ENV=production
-    volumes:
-      - ./api/code:/home/node/app
+      RABBITMQ_ERLANG_COOKIE: "secret_cookie"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
     ports:
-      - '8500:8500'
+      - "15672:15672"
+      - "5672:5672"
+    labels:
+      NAME: "rabbitmq"
+    volumes:
+      - "./event-queue/enabled_plugins:/etc/rabbitmq/enabled_plugins"
+
+  node:
+    build: .
     command: 'npm run dev'
+    ports:
+    - '8500:8500'
     links:
       - database
+      - rabbitmq
     depends_on:
       - database
+      - rabbitmq
