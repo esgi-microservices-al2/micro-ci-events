@@ -1,15 +1,30 @@
 version: '3'
 
 services:
+  database:
+    image: 'mongo'
+    container_name: mongo
+    restart: always
+    env_file:
+      - ./database/db_credentials.env
+    volumes:
+      - ./database/mongo-volume:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - network
+
   node:
     image: esgimicroci/al2-events
     container_name: al2-events
     ports:
     - '8500:8500'
-    links:
-      - database
-      - rabbitmq
     depends_on:
       - database
-      - rabbitmq
     restart: always
+    networks:
+      - network
+
+  networks:
+    network:
+      driver: bridge
