@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var amqp = require('amqplib/callback_api');
+let amqp = require('amqplib/callback_api');
 
 amqp.connect('amqp://localhost', function(error0, connection) {
     if (error0) {
@@ -11,7 +11,7 @@ amqp.connect('amqp://localhost', function(error0, connection) {
             throw error1;
         }
 
-        var queue = 'hello';
+        let queue = 'hello';
 
         channel.assertQueue(queue, {
             durable: false
