@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-let amqp = require('amqplib/callback_api');
+const amqp = require('amqplib/callback_api');
 
 amqp.connect('amqp://localhost', function(error0, connection) {
     if (error0) {
@@ -11,16 +11,25 @@ amqp.connect('amqp://localhost', function(error0, connection) {
             throw error1;
         }
 
-        let queue = 'hello';
-        let msg = 'Hello world';
+        let queue = 'queue';
+        let msg = [
+            {
+            field1:"test1",
+            field2:"example1"
+            },
+            {
+                field1:"test2",
+                field2:"example2"
+            }
+            ];
 
         channel.assertQueue(queue, {
             durable: false
         });
 
-        channel.sendToQueue(queue, Buffer.from(msg));
+        channel.sendToQueue(queue, Buffer.from(JSON.stringify(msg)));
 
-        console.log(" [x] Sent %s", msg);
+        console.log(" [-->] Sent %s", msg);
     });
 
     setTimeout(function() {
