@@ -1,9 +1,9 @@
 const Build = require('../models/build');
+const MQService = require('../Services.import_publish');
 
 exports.getAllBuilds = async (req, res) => {
     Build.find({}, (err, builds) => {
         if (err) res.status(500).send(err)
-        console.log(builds);
         return res.status(200).json(builds);
     })
 };
@@ -31,4 +31,11 @@ exports.getBuildEvents = async (req, res) => {
 
 exports.getBuildEvents = async (req, res) => {
     return [];
+};
+
+exports.postBuildEvent = function (req, res) {
+    const msg = req.body;
+
+    MQService.import_publish(msg);
+
 };
