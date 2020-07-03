@@ -14,8 +14,8 @@ amqp.connect('amqp://localhost', function(error0, connection) {
         let queue = 'queue';
         let msg = [
             {
-            field1:"test1",
-            field2:"example1"
+                field1:"test1",
+                field2:"example1"
             },
             {
                 field1:"test2",
