@@ -1,0 +1,11 @@
+{
+  "name": "event-queue",
+  "version": "1.0.0",
+  "description": "We decided, along with other teams, to use RabbitMQ as message broker for ou event queue. We will use it with AMQP Protocol.",
+  "main": "receive.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
