@@ -3,7 +3,7 @@ const consul_host = process.env.CONSUL_HOST || 'micro-ci.westus2.cloudapp.azure.
 const consul_port = process.env.CONSUL_PORT || '40601';
 const service_host = process.env.MS_HOSTNAME || process.env.HOSTNAME;
 const service_port = process.env.port || 8500;
-const CONSUL_ID = 'events';
+const CONSUL_ID = 'events-' + require('node-uuid').v4();
 
 const consul = require('consul')({
     host: consul_host,
@@ -31,15 +31,6 @@ consul.agent.service.register(details, err => {
         console.log(err)
     } else {
         console.log('service registered')
-        // schedule heartbeat
-        setInterval(() => {
-            consul.agent.check.pass({id:`service:${CONSUL_ID}`}, err => {
-                if (err)
-                    console.log (err.message, err.stack);
-                else
-                    console.log('told Consul that we are healthy');
-            });
-        }, 5 * 1000);
     }
 });
 
