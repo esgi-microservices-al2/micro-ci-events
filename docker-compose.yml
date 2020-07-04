@@ -32,6 +32,11 @@ services:
   node:
     build: .
     command: 'npm run dev'
+    environment:
+      RABBITMQ_USER: "rabbitmq"
+      RABBITMQ_PASS: "rabbitmq"
+    volumes:
+    - ./code:/usr/src/app/
     ports:
     - '8500:8500'
     links:
