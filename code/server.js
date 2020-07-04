@@ -72,4 +72,6 @@ process.on('SIGINT', () => {
     });
 });
 
+require('./workers/MQconsumer');
+
 module.exports = app;

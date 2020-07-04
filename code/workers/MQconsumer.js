@@ -1,14 +1,16 @@
 'use strict';
 
-const rabbitmq_connector = 'amqp://url:port';
-const Open = require('amqplib').connect(rabbitmq_connector);
+const amqp = require('amqplib');
+let rabbitmq_user_passwd = process.env.RABBITMQ_USER ? process.env.RABBITMQ_USER + ':' + process.env.RABBITMQ_PASS + "@" : "";
+let rabbitmq_url = process.env.RABBITMQ_URL || 'rabbitmq';
+let rabbitmq_connector = 'amqp://' + rabbitmq_user_passwd + rabbitmq_url;
 const MQSaveService = require('../Services/MQSave');
 
 let import_consume = function()
 {
-    let q = 'import';
+    let q = 'microci-event';
 
-    Open.then(function(conn) {
+    amqp.connect(rabbitmq_connector).then(function(conn) {
         process.once('SIGINT', function() { conn.close(); });
         return conn.createChannel()
             .then(function(ch) {
@@ -28,9 +30,9 @@ let import_consume = function()
                     MQSaveService.addBuild(body);
 
                     setTimeout(function () {
-                        console.log(' [x] Done');
+                        console.log(JSON.stringify(body) + ' [x] Done');
                         ch.ack(msg);
-                    }, secs * 1000);
+                    }, 5 * 1000);
                 }
 
 
