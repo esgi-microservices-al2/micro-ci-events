@@ -9,25 +9,17 @@ const port = process.env.PORT || 8500;
 const app = express();
 app.use(bodyParser.json());
 
-const options = {useNewUrlParser: true, useUnifiedTopology: true};
-const urlmongo = "mongodb://esgi:esgi@database:27017/dbms";
-mongoose.connect(urlmongo, options);
+const MQService = require('./services/RabbitMQService');
+const DBService = require('./services/MongoDBService');
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Erreur lors de la connexion'));
-db.once('open', function (){
-    console.log("Connexion à la base OK");
-});
-
-app.use('/event', require('./routes/events.router'));
-app.use('/build', require('./routes/build.router'));
+app.use('/event', require('./routes/events.router')(new DBService(), new MQService()));
+app.use('/build', require('./routes/build.router')(new DBService()));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port);
 console.log(`Listening on http://localhost:${port}`);
 
-// TEST CONSUL
-
+// TEST CONSUL TODO: put in service
 let consul = require('consul')({
     host: "micro-ci.westus2.cloudapp.azure.com",
     port: 40601,
@@ -36,9 +28,9 @@ let uuid = require('node-uuid');
 const CONSUL_ID = uuid.v4();
 
 let details = {
-    name: 'event-microservice',
-    address: 'somewhere.over.the.rainbow',
-    port: 666,
+    name: 'events',
+    address: process.env.MS_HOSTNAME || process.env.HOSTNAME,
+    port: port,
     id: CONSUL_ID,
     check: {
         ttl: '10s',
@@ -72,6 +64,6 @@ process.on('SIGINT', () => {
     });
 });
 
-require('./workers/MQconsumer');
+require('./workers/MQEventConsumer')(new DBService(), new MQService());
 
 module.exports = app;

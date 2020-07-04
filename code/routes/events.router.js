@@ -1,10 +1,13 @@
 const express = require('express');
-const EventCtrl = require('../controllers/event.controller');
+const EventController = require('../controllers/event.controller');
 
 const router = express.Router();
 
-router.get('/', EventCtrl.getAllEvents);
-router.get('/test', EventCtrl.testEvent);
-router.get('/:id', EventCtrl.getEvent);
+module.exports = function(DBService, MQService) {
+    let eventController = new EventController(DBService, MQService);
 
-module.exports = router;
+    router.get('/', eventController.getAllEvents.bind(eventController));
+    router.get('/test', eventController.testEvent.bind(eventController));
+    router.get('/:id', eventController.getEvent.bind(eventController));
+    return router;
+};

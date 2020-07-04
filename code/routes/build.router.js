@@ -1,12 +1,12 @@
 const express = require('express');
-const BuildCtrl = require('../controllers/buid.controller');
+const BuildController = require('../controllers/build.controller');
 
 const router = express.Router();
 
-router.get('/', BuildCtrl.getAllBuilds);
-router.get('/:id', BuildCtrl.getBuild);
-router.get('/:id/events', BuildCtrl.getBuildEvents);
-//router.get('/:id/nextevents', BuildCtrl.getBuildNextEvents);
+module.exports = function(connection) {
+    let buildController = new BuildController(connection);
+    router.get('/:id/events', buildController.getBuildEvents.bind(buildController));
+    router.get('/:id/nextevent', buildController.getBuildNextEvent.bind(buildController));
 
-
-module.exports = router;
+    return router;
+}.bind(this);

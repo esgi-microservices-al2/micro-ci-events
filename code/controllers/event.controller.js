@@ -1,50 +1,29 @@
-const Event = require('../models/event');
-/** TODO : put AMQP logic in services */
-const amqp = require('amqplib');
-let rabbitmq_user_passwd = process.env.RABBITMQ_USER ? process.env.RABBITMQ_USER + ':' + process.env.RABBITMQ_PASS + "@" : "";
-let rabbitmq_host = process.env.RABBITMQ_HOST || 'rabbitmq';
-let rabbitmq_port = process.env.RABBITMQ_PORT || '5672';
-let rabbitmq_connector = 'amqp://' + rabbitmq_user_passwd + rabbitmq_host + ':' + rabbitmq_port;
+const EventModel = require('../models/event.model');
 
-exports.getAllEvents = async (req, res) => {
-    Event.find({}, (err, evts) => {
-        if (err) res.status(500).send(err)
+class EventController {
+    constructor (DBService, MQService) {
+        this.eventModel = new EventModel(DBService, MQService);
+    }
 
-        return res.status(200).json(evts);
-    })
-};
+    getAllEvents (req, res) {
+        this.eventModel.getAllEvents().then((err, event) => {
+            if (err) res.status(500).send(err);
+            return res.status(200).json(event);
+        })
+    };
 
-exports.getEvent = async (req, res) => {
-    Event.findOne({id: req.params.id}, (err, evts) => {
-        if (err) res.status(500).send(err)
+    getEvent (req, res) {
+        this.eventModel.getEventById(req.params.id).then((err, event) => {
+            if (err) res.status(500).send(err);
+            return res.status(200).json(event);
+        })
+    };
 
-        return res.status(200).json(evts);
-    })
-};
+    testEvent (req, res)  {
+        this.eventModel.testSendEvent();
 
-exports.testEvent = async (req, res) => {
-    amqp.connect(rabbitmq_connector).then(function(conn) {
-        return conn.createChannel();
-    }).then(function(ch) {
-        let queue = 'microci-event';
-        let msg = [
-            {
-                projectId: 'project_1',
-                buildId: 'build_1',
-                date: 1590354264281,
-                content: 'Deployed successfully',
-                type: 'success'
-            }
-        ];
-        let stringmsg = JSON.stringify(msg);
+        return res.status(200).json('Event sent');
+    };
+}
 
-        return ch.assertQueue(queue, {durable: true}).then(function() {
-            ch.sendToQueue(queue, new Buffer(stringmsg));
-            return ch.close();
-        }.bind(this));
-
-    }).catch(console.warn);
-
-    return res.status(200).json('ok');
-};
-
+module.exports = EventController;

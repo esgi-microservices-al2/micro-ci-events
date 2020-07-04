@@ -24,6 +24,7 @@ services:
       RABBITMQ_PASS: "${RABBITMQ_PASS}"
       RABBITMQ_HOST: "${RABBITMQ_HOST}"
       RABBITMQ_PORT: "${RABBITMQ_PORT}"
+      MS_HOSTNAME: "${MS_HOSTNAME}"
     ports:
     - '8500:8500'
     depends_on:
