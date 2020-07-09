@@ -38,13 +38,15 @@ consul.agent.service.register(details, err => {
     }
 });
 
-process.on('SIGINT', () => {
-    console.log('SIGINT. De-Registering...');
-    let details = {id: CONSUL_ID};
+["SIGUSR1", "SIGINT", "SIGTERM", "SIGPIPE", "SIGHUP", "SIGBREAK", "SIGWINCH",].map(function(sigName){
+    process.on(sigName, () => {
+        console.log(sigName + '. De-Registering...');
+        let details = {id: CONSUL_ID};
 
-    consul.agent.service.deregister(details, (err) => {
-        console.log('de-registered.', err);
-        process.exit();
+        consul.agent.service.deregister(details, (err) => {
+            console.log('de-registered.', err);
+            process.exit();
+        });
     });
 });
 
