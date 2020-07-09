@@ -1,9 +1,9 @@
 'use strict';
-const consul_host = process.env.CONSUL_HOST || 'micro-ci.westus2.cloudapp.azure.com';
-const consul_port = process.env.CONSUL_PORT || '40601';
+const consul_host  = process.env.CONSUL_HOST || 'micro-ci.westus2.cloudapp.azure.com';
+const consul_port  = process.env.CONSUL_PORT || '40601';
 const service_host = process.env.MS_HOSTNAME || process.env.HOSTNAME;
 const service_port = process.env.port || 8500;
-const CONSUL_ID = 'events-' + require('node-uuid').v4();
+const CONSUL_ID    = 'events-' + require('node-uuid').v4();
 
 const consul = require('consul')({
     host: consul_host,
@@ -21,13 +21,17 @@ const details = {
         timeout: '5s'
     },
     tags: [
-        "test event",
+        'traefik.enable=true',
+        'traefik.backend=al2-events',
+        'PathPrefix=/events/',
+        'PathPrefixStrip=/events/'
+
     ],
     token: process.env.CONSUL_TOKEN || null
 };
 
 consul.agent.service.register(details, err => {
-    if(err) {
+    if (err) {
         console.log(err)
     } else {
         console.log('service registered')
@@ -45,7 +49,8 @@ process.on('SIGINT', () => {
 });
 
 module.exports = class ConsulSDService {
-    constructor() {}
+    constructor() {
+    }
 
     getSDConnection() {
         return consul;
