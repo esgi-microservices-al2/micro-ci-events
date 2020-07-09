@@ -25,8 +25,8 @@ const details = {
         //'traefik.backend=al2-events',
         'traefik.frontend.entryPoints=http',
         'traefik.frontend.rule=PathPrefixStrip:/events/',
-        'traefik.port=' + service_port,
-        'traefik.docker.network=micro-ci-events_network',
+        //'traefik.port=' + service_port,
+        //'traefik.docker.network=micro-ci-events_network',
     ],
     token: process.env.CONSUL_TOKEN || null
 };
