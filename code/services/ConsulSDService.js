@@ -24,7 +24,7 @@ const details = {
         'traefik.enable=true',
         'traefik.backend=al2-events',
         'traefik.frontend.entryPoints=http',
-        'traefik.frontend.rule=PathPrefixStrip:/events/'
+        'traefik.frontend.rule=PathPrefixStrip:/events/',
         'traefik.port=' + service_port,
     ],
     token: process.env.CONSUL_TOKEN || null
