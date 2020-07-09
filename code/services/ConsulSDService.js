@@ -23,8 +23,8 @@ const details = {
     tags: [
         'traefik.enable=true',
         'traefik.backend=al2-events',
-        'PathPrefix=/events/',
-        'PathPrefixStrip=/events/'
+        'traefik.frontend.entryPoints=http',
+        'traefik.frontend.rule=PathPrefixStrip:/events/'
 
     ],
     token: process.env.CONSUL_TOKEN || null
