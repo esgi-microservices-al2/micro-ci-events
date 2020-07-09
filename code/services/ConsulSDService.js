@@ -41,7 +41,9 @@ consul.agent.service.register(details, err => {
 ["SIGUSR1", "SIGINT", "SIGTERM", "SIGPIPE", "SIGHUP", "SIGBREAK", "SIGWINCH",].map(function(sigName){
     process.on(sigName, () => {
         console.log(sigName + '. De-Registering...');
-        let details = {id: CONSUL_ID};
+        let details = {
+            id: CONSUL_ID
+            token: process.env.CONSUL_TOKEN || null};
 
         consul.agent.service.deregister(details, (err) => {
             console.log('de-registered.', err);
