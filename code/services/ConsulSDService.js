@@ -26,6 +26,7 @@ const details = {
         'traefik.frontend.entryPoints=http',
         'traefik.frontend.rule=PathPrefixStrip:/events/',
         'traefik.port=' + service_port,
+        'traefik.docker.network=micro-ci-events_network',
     ],
     token: process.env.CONSUL_TOKEN || null
 };
@@ -42,7 +43,7 @@ consul.agent.service.register(details, err => {
     process.on(sigName, () => {
         console.log(sigName + '. De-Registering...');
         let details = {
-            id: CONSUL_ID
+            id: CONSUL_ID,
             token: process.env.CONSUL_TOKEN || null};
 
         consul.agent.service.deregister(details, (err) => {
