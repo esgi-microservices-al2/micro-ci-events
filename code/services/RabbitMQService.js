@@ -6,9 +6,11 @@ let rabbitmq_port = process.env.RABBITMQ_PORT || '5672';
 let rabbitmq_connector = 'amqp://' + rabbitmq_user_passwd + rabbitmq_host + ':' + rabbitmq_port;
 
 module.exports = class RabbitMQService {
-    constructor() {}
+    constructor() {
+        this.connection = amqp.connect(rabbitmq_connector);
+    }
 
     async getMQConnection() {
-        return amqp.connect(rabbitmq_connector);
+        return this.connection;
     }
 };
