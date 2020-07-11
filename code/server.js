@@ -7,9 +7,10 @@ const port = process.env.PORT || 8500;
 
 const MQService = require('./services/RabbitMQService');
 const DBService = require('./services/MongoDBService');
+let mqService = new MQService();
 
 app.use(bodyParser.json());
-app.use('/event', require('./routes/events.router')(new DBService(), new MQService()));
+app.use('/event', require('./routes/events.router')(new DBService(), mqService));
 app.use('/build', require('./routes/build.router')(new DBService()));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/health', function (req, res) {
@@ -20,6 +21,6 @@ app.listen(port);
 console.log(`Listening on http://localhost:${port}`);
 
 require('./services/ConsulSDService');
-require('./workers/MQEventConsumer')(new DBService(), new MQService());
+require('./workers/MQEventConsumer')(new DBService(), mqService);
 
 module.exports = app;
