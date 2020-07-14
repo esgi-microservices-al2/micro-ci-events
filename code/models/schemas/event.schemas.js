@@ -5,7 +5,7 @@ module.exports = new Schema({
     'buildId': String,
     'subjectId': String,
     'date': Date,
-    'content': String, // TODO: maybe duplicate schemas to have JSON for commands
+    'content': String,
     'type': String
 }, {
     'collection': 'events',

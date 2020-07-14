@@ -14,4 +14,9 @@ module.exports = class BuildModel {
     async getNextEvent() {
         return {'todo': 'true'};
     }
+
+    async getLastEvent(buildId) {
+        let events = this.eventModel.findEventsByBuildId(buildId);
+        return events[events.length - 1];
+    }
 };
