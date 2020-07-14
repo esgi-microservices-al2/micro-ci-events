@@ -2,8 +2,8 @@
 const EventModel = require('../models/event.model');
 
 class MQEventConsumer {
-    constructor(connection, MQService) {
-        this.eventModel = new EventModel(connection);
+    constructor(DBService, MQService) {
+        this.eventModel = new EventModel(DBService, MQService);
         this.MQService = MQService;
         this.consume();
     }

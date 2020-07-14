@@ -18,6 +18,9 @@ module.exports = class EventModel {
     }
 
     addEvent(event) {
+        if(event.type === "success" || event.type === "error") {
+            this.sendEventToNotification(event);
+        }
         let eventDocument = new this.eventDbDocument(event);
         return this.eventCollection.insertOne(eventDocument);
     }
@@ -49,4 +52,20 @@ module.exports = class EventModel {
     }
 
     getNextEvent() {}
+
+    sendEventToNotification(event) {
+        this.MQService.getMQConnection().then(function(conn) {
+            return conn.createChannel();
+        }).then(function(ch) {
+            let queue = process.env.RABBITMQ_NOTIFICATION_QUEUE || 'al2.notification.queue';
+
+            let stringEvent = JSON.stringify(event);
+
+            return ch.assertQueue(queue, {durable: true}).then(function() {
+                ch.sendToQueue(queue, new Buffer(stringEvent));
+                return ch.close();
+            }.bind(this));
+
+        }).catch(console.warn);
+    }
 };
