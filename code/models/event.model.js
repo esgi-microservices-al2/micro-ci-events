@@ -31,15 +31,13 @@ module.exports = class EventModel {
             return conn.createChannel();
         }).then(function(ch) {
             let queue = process.env.RABBITMQ_EVENT_QUEUE || 'al2.event.queue';
-            let msg = [
-                {
+            let msg = {
                     projectId: 'project_1',
-                    buildId: 'build_3',
+                    buildId: 'build_4',
                     date: 1590354264281,
                     content: 'Deployed successfully',
                     type: 'success'
-                }
-            ];
+                };
             let stringmsg = JSON.stringify(msg);
 
             return ch.assertQueue(queue, {durable: true}).then(function() {

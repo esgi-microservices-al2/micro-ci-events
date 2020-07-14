@@ -22,12 +22,12 @@ class MQEventConsumer {
                     });
                     ok = ok.then(function () {
                         ch.consume(queue, function(msg) {
-                            let body = JSON.parse(msg.content)[0];
-                            console.log(body);
+                            console.log(msg.content + ' adding to events...');
+                            let body = JSON.parse(msg.content);
                             this.eventModel.addEvent(body);
 
                             setTimeout(function () {
-                                console.log(JSON.stringify(body) + ' [x] Done');
+                                console.log(JSON.stringify(body) + ' acking');
                                 ch.ack(msg);
                             }, 5 * 1000);
                         }.bind(this), {noAck: false});
