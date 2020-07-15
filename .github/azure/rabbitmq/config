@@ -1,7 +1,0 @@
-[
-  {rabbitmq_management,
-   [
-     {load_definitions, "/opt/bitnami/rabbitmq/etc/rabbitmq/definitions.json" }
-   ]
-  }
-].
