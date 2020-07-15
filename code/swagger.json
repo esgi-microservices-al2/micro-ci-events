@@ -1,0 +1,255 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Swagger for events API for ESGI AL2 Microservice project",
+    "version": "1.0.0",
+    "title": "Swagger Events API"
+  },
+  "host": "localhost",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "event",
+      "description": "easily retrieve events"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/event": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Get all events of the db",
+        "description": "",
+        "operationId": "getEvents",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          }
+        }
+      }
+    },
+    "/event/{eventId}": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Find event by ID",
+        "description": "Returns a single event",
+        "operationId": "getEventById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "description": "ID of event to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Event not found"
+          }
+        }
+      }
+    },
+    "/event/test": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "summary": "Find a test event",
+        "description": "Send single test event request",
+        "operationId": "getEventTest",
+        "produces": [
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "404": {
+            "description": "Event not found"
+          }
+        }
+      }
+    },
+    "/build/{buildId}/events": {
+      "get": {
+        "tags": [
+          "build"
+        ],
+        "summary": "Find events for a build ID",
+        "description": "Returns an array of event for a given build ID",
+        "operationId": "getEventsByBuildId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "BuildId",
+            "in": "path",
+            "description": "ID of build to use",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Event not found"
+          }
+        }
+      }
+    },
+    "/build/{buildId}/lastEvents": {
+      "get": {
+        "tags": [
+          "build"
+        ],
+        "summary": "Find the last events for a build ID",
+        "description": "Returns the last event for a given build ID",
+        "operationId": "getLastEventByBuildId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "BuildId",
+            "in": "path",
+            "description": "ID of build to use",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Event not found"
+          }
+        }
+      }
+    },
+    "/build/{buildId}/nextEvent": {
+      "get": {
+        "tags": [
+          "build"
+        ],
+        "summary": "Find the next events for a build ID",
+        "description": "Wait the return of the next event for a given build ID",
+        "operationId": "getNextEventByBuildId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "BuildId",
+            "in": "path",
+            "description": "ID of build to use",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Event not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Event": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "format": "varchar"
+        },
+        "buildId": {
+          "type": "string",
+          "format": "varchar"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "content": {
+          "type": "string",
+          "format": "varchar"
+        },
+        "type": {
+          "type": "string",
+          "format": "varchar"
+        }
+      },
+      "xml": {
+        "name": "Event"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
