@@ -1,6 +1,6 @@
 {
   "name": "microservice-event-api",
-  "version": "1.0.0",
+  "version": "1.7.0",
   "description": "microservice-event-api",
   "main": "index.js",
   "scripts": {

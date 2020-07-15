@@ -15,6 +15,13 @@ class BuildController {
     getBuildNextEvent(req,res) {
         return {'next': 'event'};
     }
+
+    getLastBuildEvent(req,res) {
+        this.buildModel.getLastEvent(req.params.id).then((err, events) => {
+            if (err) res.status(500).send(err);
+            return res.status(200).json(events);
+        })
+    }
 }
 
 module.exports = BuildController;
